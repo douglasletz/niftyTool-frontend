@@ -22,10 +22,14 @@ const styles = {
 		flexDirection: "row",
 	},
 	sidebar: {
-		width: 300,
+		minWidth: 300,
+		height: window.innerHeight,
+		position: "fixed",
+		overflowY: "auto",
 	},
 	main: {
 		display: "flex",
+		marginLeft: 350,
 	},
 }
 

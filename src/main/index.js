@@ -1,141 +1,87 @@
 import { useState, useEffect } from "react"
-import { initStore, setCheck } from "../redux/actioncreators"
+import { initStore } from "../redux/actioncreators"
 import { useSelector, useDispatch } from "react-redux"
-
-function ElementItem(props) {
-	const { data } = props
-	return (
-		<div>
-			{/* <img src={data.image} /> */}
-			<label>{data.name}</label>
-		</div>
-	)
-}
-
-function FilterItem(props) {
-	const { title, key1 } = props
-	const dispatch = useDispatch()
-	return (
-		<div onClick={() => dispatch(setCheck({ key1, key2: title }))}>
-			{title}
-		</div>
-	)
-}
+import FilterButton from "../component/FilterButton"
+import TokenElement from "../component/tokenElement"
+import axios from "axios"
+import { styles } from "./style"
 
 export default function Main() {
 	const [elements, setElements] = useState([])
-	const menuData = useSelector((state) => state)
-	const menuKeys = Object.keys(menuData)
+	const sideBarData = useSelector((state) => state)
+	const attrTypes = Object.keys(sideBarData)
 	const dispatch = useDispatch()
 	useEffect(() => {
-		const menuData = {
-			skin: {
-				light: { checked: true, values: [0, 1] },
-				dark: { checked: false, values: [1] },
-			},
-			back: {
-				light: { checked: false, values: [0, 1] },
-				dark: { checked: false, values: [0] },
-			},
-		}
-		dispatch(initStore(menuData))
-		setElements([
-			{
-				_id: "6139d9dd6c52fc8e1c7a9ec5",
-				name: "Pudgy Penguin #0",
-				image: "https://api.pudgypenguins.io/penguin/image/0",
-				attributes: [
-					{
-						trait_type: "Background",
-						value: "Purple",
-					},
-					{
-						trait_type: "Skin",
-						value: "Mint",
-					},
-					{
-						trait_type: "Body",
-						value: "Hoodie Pink",
-					},
-					{
-						trait_type: "Face",
-						value: "Winking",
-					},
-					{
-						trait_type: "Head",
-						value: "Wizard Hat",
-					},
-				],
-				__v: 0,
-			},
-			{
-				_id: "6139d9dd6c52fc8e1c7a9ec6",
-				name: "Pudgy Penguin #1",
-				image: "https://api.pudgypenguins.io/penguin/image/1",
-				attributes: [
-					{
-						trait_type: "Background",
-						value: "Beige",
-					},
-					{
-						trait_type: "Skin",
-						value: "Light Gray",
-					},
-					{
-						trait_type: "Body",
-						value: "Tribal Necklace",
-					},
-					{
-						trait_type: "Face",
-						value: "Beard",
-					},
-					{
-						trait_type: "Head",
-						value: "Bowl Cut",
-					},
-				],
-				__v: 0,
-			},
-		])
+		let tokenData = []
+		;(async () => {
+			let { data } = await axios.get(
+				"http://localhost/ethereum/0xbd3531da5cf5857e7cfaa92426877b022e612cf8"
+			)
+			setElements(data)
+			tokenData = data
+
+			console.log(tokenData)
+			const sideBarStore = {}
+			tokenData.map((item, index) => {
+				item.attributes.map((attr) => {
+					sideBarStore[attr.trait_type] =
+						sideBarStore[attr.trait_type] ?? {}
+
+					sideBarStore[attr.trait_type][attr.value] = sideBarStore[
+						attr.trait_type
+					][attr.value] ?? { checked: false, values: [] }
+
+					sideBarStore[attr.trait_type][attr.value].values.push(index)
+					return 0
+				})
+				return 0
+			})
+
+			dispatch(initStore(sideBarStore))
+		})()
 	}, [])
 	return (
 		<div className="container">
-			{menuKeys.map((key1, index) => {
-				const checkedData = menuData[key1]
-				const checkedKeys = Object.keys(checkedData)
-				return (
-					<div>
-						{checkedKeys
-							.filter((key) => checkedData[key].checked == true)
-							.map((key, index) => (
-								<div>
-									<FilterItem title={key} key1={key1} />
-								</div>
-							))}
-					</div>
-				)
-			})}
-			{menuKeys.map((key, index) => {
-				const checkedData = menuData[key]
-				const checkedKeys = Object.keys(checkedData)
-				return (
-					<div>
-						{checkedKeys
-							.filter((key) => checkedData[key].checked == true)
-							.map((key, index) => (
-								<div>
-									{checkedData[key].values.map(
-										(id, index) => (
-											<ElementItem data={elements[id]} />
-										)
-									)}
-								</div>
-							))}
-					</div>
-				)
-			})}
+			<div style={styles.main}>
+				{attrTypes.map((key1, index) => {
+					const checkedData = sideBarData[key1]
+					const checkedKeys = Object.keys(checkedData)
+					return (
+						<>
+							{checkedKeys
+								.filter(
+									(key) => checkedData[key].checked === true
+								)
+								.map((key, index) => (
+									<FilterButton title={key} key1={key1} />
+								))}
+						</>
+					)
+				})}
+			</div>
+
+			<div style={styles.main}>
+				{attrTypes.map((key, index) => {
+					const checkedData = sideBarData[key]
+					const checkedKeys = Object.keys(checkedData)
+					return (
+						<>
+							{checkedKeys
+								.filter(
+									(key) => checkedData[key].checked === true
+								)
+								.map((key, index) =>
+									checkedData[key].values.map((id, index) => (
+										<TokenElement data={elements[id]} />
+									))
+								)}
+						</>
+					)
+				})}
+			</div>
+
 			{/* {elements.map((data) => (
-				<ElementItem data={data} />
+				<tokenElement data={data} />
 			))} */}
 		</div>
 	)
