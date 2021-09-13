@@ -1,7 +1,9 @@
 import SideBar from "./sideBar"
 import Main from "./main"
+import { useParams } from "react-router-dom"
 
 function App() {
+	const tokenAddr = useParams()
 	return (
 		<div className="App">
 			<div style={styles.container}>
@@ -9,7 +11,7 @@ function App() {
 					<SideBar />
 				</div>
 				<div style={styles.main}>
-					<Main />
+					<Main tokenAddr={tokenAddr} />
 				</div>
 			</div>
 		</div>

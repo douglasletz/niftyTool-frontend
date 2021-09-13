@@ -7,7 +7,7 @@ import axios from "axios"
 import { styles } from "./style"
 import { LazyLoad } from "react-observer-api"
 
-export default function Main() {
+export default function Main(props) {
 	const [elements, setElements] = useState([])
 	const sideBarData = useSelector((state) => state)
 	const attrTypes = Object.keys(sideBarData)
@@ -20,7 +20,7 @@ export default function Main() {
 		let tokenData = []
 		;(async () => {
 			let { data } = await axios.get(
-				"http://localhost/ethereum/0xbd3531da5cf5857e7cfaa92426877b022e612cf8"
+				`http://localhost/ethereum/${props.tokenAddr.address}`
 			)
 			setElements(data)
 			tokenData = data
