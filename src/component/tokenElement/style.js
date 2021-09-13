@@ -13,5 +13,6 @@ export const styles = {
 		width: "160px",
 		height: "200px",
 		borderRadius: "16px",
+		padding: 10,
 	},
 }

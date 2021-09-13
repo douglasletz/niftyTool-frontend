@@ -5,6 +5,7 @@ import FilterButton from "../component/FilterButton"
 import TokenElement from "../component/tokenElement"
 import axios from "axios"
 import { styles } from "./style"
+import { LazyLoad } from "react-observer-api"
 
 export default function Main() {
 	const [elements, setElements] = useState([])
@@ -60,25 +61,32 @@ export default function Main() {
 				})}
 			</div>
 
-			<div style={styles.main}>
-				{attrTypes.map((key, index) => {
-					const checkedData = sideBarData[key]
-					const checkedKeys = Object.keys(checkedData)
-					return (
-						<>
-							{checkedKeys
-								.filter(
-									(key) => checkedData[key].checked === true
-								)
-								.map((key, index) =>
-									checkedData[key].values.map((id, index) => (
-										<TokenElement data={elements[id]} />
-									))
-								)}
-						</>
-					)
-				})}
-			</div>
+			<LazyLoad>
+				<div style={styles.main}>
+					{attrTypes.map((key, index) => {
+						const checkedData = sideBarData[key]
+						const checkedKeys = Object.keys(checkedData)
+						return (
+							<>
+								{checkedKeys
+									.filter(
+										(key) =>
+											checkedData[key].checked === true
+									)
+									.map((key, index) =>
+										checkedData[key].values.map(
+											(id, index) => (
+												<TokenElement
+													data={elements[id]}
+												/>
+											)
+										)
+									)}
+							</>
+						)
+					})}
+				</div>
+			</LazyLoad>
 
 			{/* {elements.map((data) => (
 				<tokenElement data={data} />

@@ -9306,6 +9306,11 @@ react-lazyload@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-lazyload/-/react-lazyload-3.2.0.tgz#497bd06a6dbd7015e3376e1137a67dc47d2dd021"
   integrity sha512-zJlrG8QyVZz4+xkYZH5v1w3YaP5wEFaYSUWC4CT9UXfK75IfRAIEdnyIUF+dXr3kX2MOtL1lUaZmaQZqrETwgw==
 
+react-observer-api@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-observer-api/-/react-observer-api-1.0.11.tgz#d747d26ee215a80b7442e7f96902718f4415ff03"
+  integrity sha512-/z138vFY9ECbqnF6L6krpKSzIgn88COJ3bamiDrxJbEZ8ZpObvOj7MD8jkgDDEwSceRofgGMIz5wAq3ytWL9Vw==
+
 react-redux@^7.2.5:
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.5.tgz#213c1b05aa1187d9c940ddfc0b29450957f6a3b8"
