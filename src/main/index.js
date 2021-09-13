@@ -5,7 +5,8 @@ import FilterButton from "../component/FilterButton"
 import TokenElement from "../component/tokenElement"
 import axios from "axios"
 import { styles } from "./style"
-import { LazyLoad } from "react-observer-api"
+import { useVisibilityHook } from "react-observer-api"
+import SearchBox from "../component/SearchBox"
 
 export default function Main(props) {
 	const [elements, setElements] = useState([])
@@ -13,6 +14,7 @@ export default function Main(props) {
 	const attrTypes = Object.keys(sideBarData)
 	const [filter, setFilter] = useState("")
 	const dispatch = useDispatch()
+	const { setElement, isVisible } = useVisibilityHook()
 
 	let isVisibleAll = true
 
@@ -46,6 +48,7 @@ export default function Main(props) {
 	return (
 		<div className="container">
 			<div>
+				<SearchBox setFilter={setFilter} />
 				<input
 					placeholder="Search Item..."
 					value={filter}
@@ -73,49 +76,53 @@ export default function Main(props) {
 				})}
 			</div>
 
-			<LazyLoad>
-				<div style={styles.main}>
-					{isVisibleAll
-						? elements.map(
-								(data, index) =>
-									data.name
-										.toLowerCase()
-										.includes(filter.toLowerCase()) && (
-										<TokenElement data={data} />
-									)
-						  )
-						: attrTypes.map((key, index) => {
-								const checkedData = sideBarData[key]
-								const checkedKeys = Object.keys(checkedData)
-								return (
-									<>
-										{checkedKeys
-											.filter(
-												(key) =>
-													checkedData[key].checked ===
-													true
-											)
-											.map((key, index) =>
-												checkedData[key].values.map(
-													(id, index) =>
-														elements[id].name
-															.toLowerCase()
-															.includes(
-																filter.toLowerCase()
-															) && (
-															<TokenElement
-																data={
-																	elements[id]
-																}
-															/>
-														)
+			<div ref={setElement}>
+				{isVisible && (
+					<div style={styles.main}>
+						{isVisibleAll
+							? elements.map(
+									(data, index) =>
+										data.name
+											.toLowerCase()
+											.includes(filter.toLowerCase()) && (
+											<TokenElement data={data} />
+										)
+							  )
+							: attrTypes.map((key, index) => {
+									const checkedData = sideBarData[key]
+									const checkedKeys = Object.keys(checkedData)
+									return (
+										<>
+											{checkedKeys
+												.filter(
+													(key) =>
+														checkedData[key]
+															.checked === true
 												)
-											)}
-									</>
-								)
-						  })}
-				</div>
-			</LazyLoad>
+												.map((key, index) =>
+													checkedData[key].values.map(
+														(id, index) =>
+															elements[id].name
+																.toLowerCase()
+																.includes(
+																	filter.toLowerCase()
+																) && (
+																<TokenElement
+																	data={
+																		elements[
+																			id
+																		]
+																	}
+																/>
+															)
+													)
+												)}
+										</>
+									)
+							  })}
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }
