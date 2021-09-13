@@ -25,23 +25,24 @@ export default function MenuItem(props) {
 				)}
 			</div>
 			{bContentVisible && (
-				<div style={styles.content.hideScroll}>
-					<div className="content" style={styles.content.mainStyle}>
-						<input
-							style={styles.content.input}
-							value={filter}
-							onChange={(event) => setFilter(event.target.value)}
-						/>
-						{checkedKeys
-							.filter((key) => key.includes(filter))
-							.map((key, index) => (
-								<CheckBoxItem
-									data={checkedData[key]}
-									title={key}
-									key1={title}
-								/>
-							))}
-					</div>
+				<div
+					className="menuItemScroll"
+					style={styles.content.mainStyle}
+				>
+					<input
+						style={styles.content.input}
+						value={filter}
+						onChange={(event) => setFilter(event.target.value)}
+					/>
+					{checkedKeys
+						.filter((key) => key.includes(filter))
+						.map((key, index) => (
+							<CheckBoxItem
+								data={checkedData[key]}
+								title={key}
+								key1={title}
+							/>
+						))}
 				</div>
 			)}
 		</div>

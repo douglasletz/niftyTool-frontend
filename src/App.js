@@ -26,6 +26,8 @@ const styles = {
 		height: window.innerHeight,
 		position: "fixed",
 		overflowY: "auto",
+		paddingRight: 10,
+		borderRight: "1px solid #ddd",
 	},
 	main: {
 		display: "flex",

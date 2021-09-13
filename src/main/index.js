@@ -11,7 +11,11 @@ export default function Main() {
 	const [elements, setElements] = useState([])
 	const sideBarData = useSelector((state) => state)
 	const attrTypes = Object.keys(sideBarData)
+	const [filter, setFilter] = useState("")
 	const dispatch = useDispatch()
+
+	let isVisibleAll = true
+
 	useEffect(() => {
 		let tokenData = []
 		;(async () => {
@@ -20,8 +24,6 @@ export default function Main() {
 			)
 			setElements(data)
 			tokenData = data
-
-			console.log(tokenData)
 			const sideBarStore = {}
 			tokenData.map((item, index) => {
 				item.attributes.map((attr) => {
@@ -43,6 +45,13 @@ export default function Main() {
 	}, [])
 	return (
 		<div className="container">
+			<div>
+				<input
+					placeholder="Search Item..."
+					value={filter}
+					onChange={(event) => setFilter(event.target.value)}
+				/>
+			</div>
 			<div style={styles.main}>
 				{attrTypes.map((key1, index) => {
 					const checkedData = sideBarData[key1]
@@ -53,9 +62,12 @@ export default function Main() {
 								.filter(
 									(key) => checkedData[key].checked === true
 								)
-								.map((key, index) => (
-									<FilterButton title={key} key1={key1} />
-								))}
+								.map((key, index) => {
+									isVisibleAll = false
+									return (
+										<FilterButton title={key} key1={key1} />
+									)
+								})}
 						</>
 					)
 				})}
@@ -63,34 +75,45 @@ export default function Main() {
 
 			<LazyLoad>
 				<div style={styles.main}>
-					{attrTypes.map((key, index) => {
-						const checkedData = sideBarData[key]
-						const checkedKeys = Object.keys(checkedData)
-						return (
-							<>
-								{checkedKeys
-									.filter(
-										(key) =>
-											checkedData[key].checked === true
+					{isVisibleAll
+						? elements.map(
+								(data, index) =>
+									data.name.includes(filter) && (
+										<TokenElement data={data} />
 									)
-									.map((key, index) =>
-										checkedData[key].values.map(
-											(id, index) => (
-												<TokenElement
-													data={elements[id]}
-												/>
+						  )
+						: attrTypes.map((key, index) => {
+								const checkedData = sideBarData[key]
+								const checkedKeys = Object.keys(checkedData)
+								return (
+									<>
+										{checkedKeys
+											.filter(
+												(key) =>
+													checkedData[key].checked ===
+													true
 											)
-										)
-									)}
-							</>
-						)
-					})}
+											.map((key, index) =>
+												checkedData[key].values.map(
+													(id, index) =>
+														elements[
+															id
+														].name.includes(
+															filter
+														) && (
+															<TokenElement
+																data={
+																	elements[id]
+																}
+															/>
+														)
+												)
+											)}
+									</>
+								)
+						  })}
 				</div>
 			</LazyLoad>
-
-			{/* {elements.map((data) => (
-				<tokenElement data={data} />
-			))} */}
 		</div>
 	)
 }
