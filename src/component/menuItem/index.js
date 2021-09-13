@@ -35,7 +35,11 @@ export default function MenuItem(props) {
 						onChange={(event) => setFilter(event.target.value)}
 					/>
 					{checkedKeys
-						.filter((key) => key.includes(filter))
+						.filter((key) => {
+							const lowerCaseKey = key.toLowerCase()
+							const lowerCaseFilter = filter.toLowerCase()
+							return lowerCaseKey.includes(lowerCaseFilter)
+						})
 						.map((key, index) => (
 							<CheckBoxItem
 								data={checkedData[key]}

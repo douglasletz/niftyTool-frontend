@@ -18,6 +18,10 @@ ReactDOM.render(
 				</Route>
 				<Route path="/">
 					<h1>Please input Token Address you want to see.</h1>
+					<h3>
+						e.g.
+						http://nifytools.com/ethereum/0xbd3531da5cf5857e7cfaa92426877b022e612cf8
+					</h3>
 				</Route>
 			</Switch>
 		</Router>

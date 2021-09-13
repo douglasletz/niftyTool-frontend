@@ -78,7 +78,9 @@ export default function Main(props) {
 					{isVisibleAll
 						? elements.map(
 								(data, index) =>
-									data.name.includes(filter) && (
+									data.name
+										.toLowerCase()
+										.includes(filter.toLowerCase()) && (
 										<TokenElement data={data} />
 									)
 						  )
@@ -96,11 +98,11 @@ export default function Main(props) {
 											.map((key, index) =>
 												checkedData[key].values.map(
 													(id, index) =>
-														elements[
-															id
-														].name.includes(
-															filter
-														) && (
+														elements[id].name
+															.toLowerCase()
+															.includes(
+																filter.toLowerCase()
+															) && (
 															<TokenElement
 																data={
 																	elements[id]
