@@ -42,6 +42,7 @@ export default function MenuItem(props) {
 						})
 						.map((key, index) => (
 							<CheckBoxItem
+								key={index}
 								data={checkedData[key]}
 								title={key}
 								key1={title}

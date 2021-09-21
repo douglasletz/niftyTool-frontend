@@ -9,7 +9,7 @@ export default function SideBar() {
 	return (
 		<>
 			{menuKeys.map((key, index) => (
-				<MenuItem data={menuData[key]} title={key} />
+				<MenuItem key={index} data={menuData[key]} title={key} />
 			))}
 		</>
 	)
